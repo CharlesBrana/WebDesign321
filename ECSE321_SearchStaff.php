@@ -15,9 +15,9 @@
 <body text="black">
 <a  href="http://localhost/ECSE321_CreateStaff.php"> Add Staff </a></li>
 <br><br><br>
-Please input name of employee
+<h3>Please input name of employee</h3>
 
-<br></br>
+<br>
 
 <form action="ECSE321_SearchStaff.php?go" method="post" id="searchform">
 
@@ -38,35 +38,39 @@ if(isset($_POST['submit']) AND htmlspecialchars($_POST['search']) != ""){
 		/* test if Get works works
 		echo "<p>get good</p>";*/
 		$name=$_POST['search']; // set $name to the name which was entered in the search box
-		//connect  to the database and select the database table			
-		$mysqli = new mysqli('mysql.cs.mcgill.ca', 'ecse321-1', '260681489', 'ecse321_2017_1');
-		//query the database table
-		$sql="SELECT name, lastname, role FROM StaffInfo WHERE  name LIKE '%" . $name . "%' OR lastname LIKE '%" . 
-$name  ."%' OR  CONCAT( name, ' ', lastname)	 Like '%" . $name  ."%'";
-		$result= mysqli_query	($mysqli, $sql);
-		
-		while($row=mysqli_fetch_array($result)){ 
-		  $FirstName  =$row['name'];    
-		  $LastName=$row['lastname']; 
-		  $Role=$row['role']; 
-			//-display the result of the array 
-			echo "<ul>\n"; 
-			// for later: echo "<li>" . "<a  href=\"search.php?id=$LastName\">"   .$FirstName . " " . $LastName .  
-"</a></li>\n"; 
-			echo "<li>" .$FirstName . " " . $LastName . " ".': '  . $Role . " </a></li>\n";		
-			echo "</ul>"; 
+		if (preg_match('/[^a-zA-Z]/', $name) == true){
+			echo "Please enter valid input";
 		}
-	  
-	} $mysqli->close();
+			else{
+			//connect  to the database and select the database table			
+			$mysqli = new mysqli('mysql.cs.mcgill.ca', 'ecse321-1', '260681489', 'ecse321_2017_1');
+			//query the database table
+			$sql="SELECT Name, LastName, Role, StaffID FROM StaffInfo WHERE  Name LIKE '%" . $name . "%' OR LastName LIKE '%" . 
+		$name  ."%' OR  CONCAT( Name, ' ', LastName)	 Like '%" . $name  ."%'";
+			$result= mysqli_query	($mysqli, $sql);
+			if($result->num_rows >0){
+				while($row=mysqli_fetch_array($result)){ 
+				  $FirstName  =$row['Name'];    
+				  $LastName=$row['LastName']; 
+				  $Role=$row['Role']; 
+				  $StaffID = $row['StaffID'];
+					//-display the result of the array 
+					echo "<ul>\n"; 
+					// for later: echo "<li>" . "<a  href=\"search.php?id=$LastName\">"   .$FirstName . " " . $LastName .  
+		"</a></li>\n"; 
+					echo "<li>" .$FirstName . " " . $LastName . " ".': '  . $Role  . ";  ID = ". $StaffID . " </li>\n";		
+					echo "</ul>"; 
+				}$mysqli->close();
+			}
+			else { 
+			echo "<li>No search results were found</li>\n";}
+		}
+	} 
 }
 
 elseif( isset($_POST['search']) AND htmlspecialchars($_POST['search'] == "")){
-	echo "<p>Please enter a search query</p>";
+	echo "<p>Please enter a valid search query</p>";
 }
-
-
-
-
 
 ?>
 
