@@ -13,8 +13,8 @@
 </head>
 
 <body text="black">
-<a  href="http://localhost/ECSE321_CreateStaff.php"> Add Staff </a></li>
-<br><br><br>
+<a  href="http://localhost/ECSE321/Staff/ECSE321_CreateStaff.php"> Add Staff </a></li><br><br>
+<a  href="http://localhost/ECSE321/Staff/ECSE321_UpdateStaff.php"> Update Staff</a></li><br><br><br>
 <h3>Please input name of employee</h3>
 
 <br>
